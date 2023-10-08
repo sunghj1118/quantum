@@ -9,11 +9,15 @@ namespace QuantumRNG {
     operation GenerateRandomBit() : Result {
         // Allocate a qubit.
         use q = Qubit();
+        mutable result = Zero;
         // Put the qubit to superposition using a Hadamard gate.
         H(q);
         // It is now at a true 50% chance of being 0 or 1.
         // Measure the qubit and return the result.
-        return M(q);
+        set result = M(q);
+        // Release the qubit.
+        Reset(q);
+        return result;
     }
 
     operation SampleRandomNumberInRange(max : Int) : Int {
@@ -30,7 +34,7 @@ namespace QuantumRNG {
 
     @EntryPoint()
     operation SampleRandomNumber() : Int {
-        let max = 50;
+        let max = 10000;
         Message($"Sampling a random number between 0 and {max}: ");
         return SampleRandomNumberInRange(max);
     }
