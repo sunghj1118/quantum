@@ -20,7 +20,7 @@ namespace QuantumRNG {
         return result;
     }
 
-    operation SampleRandomNumberInRange(max : Int) : Int {
+    operation SampleRandomNumberInRange(min: Int, max : Int) : Int {
         mutable output = 0;
         repeat {
             mutable bits = [];
@@ -28,14 +28,15 @@ namespace QuantumRNG {
                 set bits += [GenerateRandomBit()];
             }
             set output = ResultArrayAsInt(bits);
-        } until (output <= max);
+        } until (output >= min and output <= max);
         return output;
     }
 
     @EntryPoint()
     operation SampleRandomNumber() : Int {
         let max = 10000;
-        Message($"Sampling a random number between 0 and {max}: ");
-        return SampleRandomNumberInRange(max);
+        let min = 1000;
+        Message($"Sampling a random number between {min} and {max}: ");
+        return SampleRandomNumberInRange(min, max);
     }
 }
